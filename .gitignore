@@ -1,0 +1,57 @@
+# Binaries
+*.exe
+*.dll
+*.lib
+*.a
+*.so
+*.dylib
+*.obj
+*.o
+*.exp
+torus-app
+torus-app-ws
+torus-app-fixed
+
+# Go build cache and modules
+bin/
+pkg/
+vendor/
+*.test
+
+# CUDA intermediate files (if any beyond the ones already listed)
+*.ptx
+*.cubin
+
+# Log files
+*.log
+
+# OS generated files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+
+# Editor/IDE specific files
+.vscode/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Backup files
+*.backup
+*.bak
+
+# Local configuration files (if any)
+# Example: local.env
+
+# Output directories (if you have specific ones)
+# Example: build/
+# Example: dist/
+
+# Dependency directories (if not using Go modules or if they are vendored and you don't want to commit)
+# vendor/ (already included for Go modules, but good to be explicit if you have other vendoring)
+
+# Test coverage
+coverage.out
+coverage.html

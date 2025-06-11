@@ -1,0 +1,76 @@
+version: '3.8'
+
+services:
+  # Production/Runtime container - lightweight with only runtime dependencies
+  torus-app:
+    build:
+      context: .
+      target: runtime
+    container_name: go-cuda-torus
+    environment:
+      - DISPLAY=:0
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=all
+    volumes:
+      # X11 socket for display (Linux hosts)
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+    ports:
+      - "8080:8080"
+    # Enable GPU access
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+
+  # Development container - includes build tools and source code mounting
+  torus-dev:
+    build:
+      context: .
+      target: development
+    container_name: go-cuda-torus-dev
+    environment:
+      - DISPLAY=:0
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=all
+      - CGO_ENABLED=1
+    volumes:
+      # Mount the source code for live development
+      - .:/workspace
+      # X11 socket for display (Linux hosts)
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      # Cache Go modules for faster builds
+      - go-mod-cache:/go/pkg/mod
+    ports:
+      - "8080:8080"
+      - "2345:2345"  # Delve debugger port
+    # Enable GPU access
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    # For development - override the default command
+    command: /bin/bash
+    stdin_open: true
+    tty: true
+
+  # Build-only container for CI/CD pipelines
+  torus-builder:
+    build:
+      context: .
+      target: builder
+    container_name: go-cuda-torus-builder
+    environment:
+      - CGO_ENABLED=1
+    volumes:
+      - .:/workspace
+      - go-mod-cache:/go/pkg/mod
+    command: go build -o torus-app .
+
+volumes:
+  go-mod-cache:
