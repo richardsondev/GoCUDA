@@ -45,7 +45,7 @@ services:
       - go-mod-cache:/go/pkg/mod
     ports:
       - "8080:8080"
-      - "2345:2345"  # Delve debugger port
+      # - "2345:2345"  # Debug port - do not expose in production
     # Enable GPU access
     deploy:
       resources:

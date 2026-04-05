@@ -58,7 +58,8 @@ type StatusData struct {
 var statusBroadcaster *StatusBroadcaster
 var statusUpgrader = websocket.Upgrader{
 	CheckOrigin: func(r *http.Request) bool {
-		return true
+		origin := r.Header.Get("Origin")
+		return origin == "" || origin == "http://localhost:8080" || origin == "http://127.0.0.1:8080"
 	},
 }
 
@@ -719,6 +720,7 @@ func StartWebServer(params *TorusParams, cudaEnabled *bool) {
 			return
 		}
 
+		r.Body = http.MaxBytesReader(w, r.Body, 1048576) // 1MB limit
 		var sceneData map[string]string
 		if err := json.NewDecoder(r.Body).Decode(&sceneData); err != nil {
 			http.Error(w, "Invalid JSON", http.StatusBadRequest)
@@ -743,6 +745,7 @@ func StartWebServer(params *TorusParams, cudaEnabled *bool) {
 			return
 		}
 
+		r.Body = http.MaxBytesReader(w, r.Body, 1048576) // 1MB limit
 		var updates map[string]interface{}
 		if err := json.NewDecoder(r.Body).Decode(&updates); err != nil {
 			http.Error(w, "Invalid JSON", http.StatusBadRequest)
@@ -814,6 +817,7 @@ func StartWebServer(params *TorusParams, cudaEnabled *bool) {
 			return
 		}
 
+		r.Body = http.MaxBytesReader(w, r.Body, 1048576) // 1MB limit
 		var updates map[string]interface{}
 		if err := json.NewDecoder(r.Body).Decode(&updates); err != nil {
 			http.Error(w, "Invalid JSON", http.StatusBadRequest)
