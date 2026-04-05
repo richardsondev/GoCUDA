@@ -1,6 +1,6 @@
 module GoCUDA
 
-go 1.22
+go 1.25.0
 
 require (
 	github.com/go-gl/gl v0.0.0-20231021071112-07e5d0ea2e71
@@ -9,4 +9,4 @@ require (
 	github.com/gorilla/websocket v1.5.0
 )
 
-require golang.org/x/image v0.18.0 // indirect
+require golang.org/x/image v0.38.0 // indirect
