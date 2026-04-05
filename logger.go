@@ -66,7 +66,8 @@ func initLogger() {
 // WebSocket upgrader
 var upgrader = websocket.Upgrader{
 	CheckOrigin: func(r *http.Request) bool {
-		return true // Allow all origins for development
+		origin := r.Header.Get("Origin")
+		return origin == "" || origin == "http://localhost:8080" || origin == "http://127.0.0.1:8080"
 	},
 }
 
