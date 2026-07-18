@@ -9,4 +9,4 @@ require (
 	github.com/gorilla/websocket v1.5.0
 )
 
-require golang.org/x/image v0.38.0 // indirect
+require golang.org/x/image v0.41.0 // indirect
